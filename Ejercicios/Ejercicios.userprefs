@@ -1,4 +1,4 @@
-﻿<Properties StartupItem="E1\E1.csproj">
+﻿<Properties StartupItem="sopa_de_letras\sopa_de_letras.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
