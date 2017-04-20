@@ -1,0 +1,5 @@
+C:\Users\daniel\Documents\Projects\Ejercicios\FP\obj\x86\Debug\FP.csprojResolveAssemblyReference.cache
+C:\Users\daniel\Documents\Projects\Ejercicios\FP\bin\Debug\FP.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\FP\bin\Debug\FP.pdb
+C:\Users\daniel\Documents\Projects\Ejercicios\FP\obj\x86\Debug\FP.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\FP\obj\x86\Debug\FP.pdb

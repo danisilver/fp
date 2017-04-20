@@ -1,0 +1,5 @@
+C:\Users\daniel\Documents\Projects\Ejercicios\P2\obj\x86\Debug\P2.csprojResolveAssemblyReference.cache
+C:\Users\daniel\Documents\Projects\Ejercicios\P2\bin\Debug\P2.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\P2\bin\Debug\P2.pdb
+C:\Users\daniel\Documents\Projects\Ejercicios\P2\obj\x86\Debug\P2.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\P2\obj\x86\Debug\P2.pdb

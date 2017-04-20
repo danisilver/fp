@@ -1,0 +1,5 @@
+C:\Users\daniel\Documents\Projects\Ejercicios\Practica\bin\Debug\Practica.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\Practica\bin\Debug\Practica.pdb
+C:\Users\daniel\Documents\Projects\Ejercicios\Practica\obj\x86\Debug\Practica.csprojResolveAssemblyReference.cache
+C:\Users\daniel\Documents\Projects\Ejercicios\Practica\obj\x86\Debug\Practica.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\Practica\obj\x86\Debug\Practica.pdb

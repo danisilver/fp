@@ -1,0 +1,5 @@
+C:\Users\daniel\Documents\Projects\Ejercicios\E1\obj\x86\Debug\E1.csprojResolveAssemblyReference.cache
+C:\Users\daniel\Documents\Projects\Ejercicios\E1\bin\Debug\E1.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\E1\bin\Debug\E1.pdb
+C:\Users\daniel\Documents\Projects\Ejercicios\E1\obj\x86\Debug\E1.exe
+C:\Users\daniel\Documents\Projects\Ejercicios\E1\obj\x86\Debug\E1.pdb
