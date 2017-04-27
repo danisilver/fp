@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace P4 {
 	class Tablero{
@@ -27,7 +28,20 @@ namespace P4 {
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;	
 
-
+		Tablero(string archivo){
+			StreamReader leer = new StreamReader(archivo);
+			int alto = 
+		}
+		static int getDim(StreamReader leer,out int ancho){
+			string pepe = leer.ReadLine ();
+			ancho = pepe.Length;
+			int i = 1;
+			while(!(leer.EndOfStream)){
+				Console.ReadLine ();
+				i++;
+			}
+			return i-1;
+		}
 		public static void Main (string[] args) {
 			ListaPares l = new ListaPares ();
 		}
