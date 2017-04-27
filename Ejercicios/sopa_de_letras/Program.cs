@@ -96,7 +96,6 @@ namespace sopa_de_letras
 					                   " en posicion ("+ pos.x + ", " + pos.y + ")" + 
 					                   " direccion (" + dir.x + ", " +dir.y + ")");
 				}
-
 			}
 
 		}

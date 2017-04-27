@@ -29,7 +29,7 @@ namespace P4 {
 
 
 		public static void Main (string[] args) {
-			
+			ListaPares l = new ListaPares ();
 		}
 	}
 }
