@@ -1,12 +1,5 @@
 C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\P3.exe
 C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\P3.pdb
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\mscorlib.dll
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\es\mscorlib.resources.dll
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\normidna.nlp
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\normnfc.nlp
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\normnfd.nlp
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\normnfkc.nlp
-C:\Users\daniel\Documents\Projects\P3\P3\bin\Debug\normnfkd.nlp
 C:\Users\daniel\Documents\Projects\P3\P3\obj\x86\Debug\P3.csprojResolveAssemblyReference.cache
 C:\Users\daniel\Documents\Projects\P3\P3\obj\x86\Debug\P3.exe
 C:\Users\daniel\Documents\Projects\P3\P3\obj\x86\Debug\P3.pdb

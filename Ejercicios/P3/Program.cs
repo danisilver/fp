@@ -48,19 +48,16 @@ namespace P3 {
 				for (int j = 0; j < tab.cas.GetLength (1); j++) {
 					Console.ResetColor ();
 					Console.SetCursorPosition (j, i);
+					bool cursor = (i == tab.posX && j == tab.posY);
 					switch (tab.cas [i, j].estado) {
 					case '*':
-						if (tab.cas [i, j].mina && bomba) {
-							Console.ForegroundColor = ConsoleColor.Red;
-							Console.Write ("x");
-						} else {
-							Console.BackgroundColor = ConsoleColor.Red;
-							Console.ForegroundColor = ConsoleColor.Gray;
-							Console.Write ("x");
-						}
+						Console.ForegroundColor = ConsoleColor.Red;
+						if (cursor)	ColoresCursor ();
+						Console.Write ("x");
 						break;
 					case 'X':
 						Console.ForegroundColor = ConsoleColor.Red;
+						if (cursor)	ColoresCursor ();
 						Console.Write ("x");
 						break;
 					case 'o':
@@ -69,92 +66,59 @@ namespace P3 {
 							Console.Write ("x");
 						} else {
 							Console.ForegroundColor = ConsoleColor.White;
-							if (i == tab.posX && j == tab.posY) {
-								Console.ForegroundColor = ConsoleColor.Black;
-								Console.BackgroundColor = ConsoleColor.White;
-							}
+							if (cursor)	ColoresCursor ();
 							Console.Write ("o");
 						}
 						break;
 					case 'm':
 						Console.BackgroundColor = ConsoleColor.Yellow;
 						Console.ForegroundColor = ConsoleColor.White;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("*");
 						break;
 					case '0':
 						Console.ForegroundColor = ConsoleColor.Blue;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write (" ");
 						break;
 					case '1':
 						Console.ForegroundColor = ConsoleColor.Blue;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("1");
 						break;
 					case '2':
 						Console.ForegroundColor = ConsoleColor.Green;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("2");
 						break;
 					case '3':
 						Console.ForegroundColor = ConsoleColor.Red;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("3");
 						break;
 					case '4':
 						Console.ForegroundColor = ConsoleColor.DarkBlue;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("4");
 						break;
 					case '5':
 						Console.ForegroundColor = ConsoleColor.DarkRed;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("5");
 						break;
 					case '6':
 						Console.ForegroundColor = ConsoleColor.Cyan;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("6");
 						break;
 					case '7':
 						Console.ForegroundColor = ConsoleColor.DarkGreen;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("7");
 						break;
 					case '8':
 						Console.ForegroundColor = ConsoleColor.Magenta;
-						if (i == tab.posX && j == tab.posY) {
-							Console.ForegroundColor = ConsoleColor.Black;
-							Console.BackgroundColor = ConsoleColor.White;
-						}
+						if (cursor)	ColoresCursor ();
 						Console.Write ("8");
 						break;
 					default:
@@ -212,7 +176,6 @@ namespace P3 {
 								pend++;
 								pendientes [pend, 0] = i;
 								pendientes [pend, 1] = j;
-
 							}
 						}
 					}
@@ -265,7 +228,6 @@ namespace P3 {
 		}
 
 		static bool ProcesaInput (ref Tablero tab, char c) {
-
 			bool perder = false;
 			if (c == 'x') {
 				if (tab.cas [tab.posX, tab.posY].estado == 'm') {
@@ -287,8 +249,8 @@ namespace P3 {
 			return perder;
 		}
 
-		static void GuardarEstado (Tablero tab, string nom) {
-			StreamWriter guard = new StreamWriter (nom);
+		static void GuardarEstado (Tablero tab) {
+			StreamWriter guard = new StreamWriter ("guardar.txt");
 			guard.WriteLine (tab.cas.GetLength (0));
 			guard.WriteLine (tab.cas.GetLength (1));
 			for (int i = 0; i < tab.cas.GetLength (0); i++) {
@@ -309,8 +271,8 @@ namespace P3 {
 			guard.Close ();
 		}
 
-		static Tablero CargarEstado (string nom) {
-			StreamReader leer = new StreamReader (nom);
+		static Tablero CargarEstado () {
+			StreamReader leer = new StreamReader ("guardar.txt");
 			int fils = int.Parse (leer.ReadLine ());
 			int cols = int.Parse (leer.ReadLine ());
 			Casilla[,] casilleros = new Casilla[fils, cols];
@@ -326,7 +288,7 @@ namespace P3 {
 						casilleros [a, b].mina = true;
 				}
 			}
-
+			leer.Close ();
 			Tablero tab = new Tablero { cas = casilleros, posX = 0, posY = 0 };
 			return tab;
 		}
@@ -349,8 +311,6 @@ namespace P3 {
 		}
 
 		static void Jugar (Tablero tablero) {
-
-
 			Console.Clear ();
 			bool bomba = false;
 			bool juego = true;
@@ -362,23 +322,24 @@ namespace P3 {
 					bomba = ProcesaInput (ref tablero, letra);
 					Dibuja (ref tablero, bomba);
 				}
-				juego = !Terminado (ref tablero);
+				juego = !Terminado (ref tablero) && letra != 'q';
 			}
-			if (!bomba) {
+			if (Terminado(ref tablero) && !bomba) {
 				Console.SetCursorPosition (0, tablero.cas.GetLength (0) + 1);
 				Console.WriteLine ("Has ganado!");
 				Console.ReadKey ();
+			}
+			if (letra == 'q') {
+				GuardarEstado (tablero);
 			}
 
 		}
 
 		public static void Main (string[] args) {
-			Console.WriteLine ("Bienvenido al Buscaminas. \nSi quieres cargar una partida ya empezada pulsa C si quieres empezar una nueva pulsa N");
+			Console.WriteLine ("Buscaminas\n c para cargar\n n para nueva partida");
 			string resp = Console.ReadLine ();
 			if (resp == "c" || resp == "C") {
-				Console.WriteLine ("Introduce el nombre de la partidaque que quieres cargar:");
-				resp = Console.ReadLine ();
-				Jugar (CargarEstado (resp));
+				Jugar (CargarEstado ());
 			} else if (resp == "n" || resp == "N") {
 				bool empezar = false;
 				int fils = 1;
@@ -399,12 +360,14 @@ namespace P3 {
 						Console.WriteLine ("Alguno de los datos introducidos no está en el rango.");
 				}
 				Tablero tablero = creaTablero (fils, cols, minas);
-
 				Jugar (tablero);
 			} else
 				Console.WriteLine ("Comando desconocido.");
 		}
 
-
+		public static void ColoresCursor(){
+			Console.ForegroundColor = ConsoleColor.Black;
+			Console.BackgroundColor = ConsoleColor.White;
+		}
 	}
 }
