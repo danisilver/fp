@@ -29,17 +29,31 @@ namespace P4 {
 		private bool Debug = true;	
 
 		Tablero(string archivo){
+			FILS = getDim (archivo, out COLS);
 			StreamReader leer = new StreamReader(archivo);
-			int alto = 
+			for (int i = 0; i < COLS; i++) {
+				for (int j = 0; j < FILS; j++) {
+					switch (leer.Read ()) {
+					case('0'):
+						cas[i,j]=Casilla.Blanco;
+					case('1'):
+						cas[i,j]=Casilla.Muro;
+					}
+				}
+			}
+
+			leer.Close ();
 		}
-		static int getDim(StreamReader leer,out int ancho){
-			string pepe = leer.ReadLine ();
-			ancho = pepe.Length;
+		static int getDim(string archivo,out int ancho){
+			StreamReader leer = new StreamReader(archivo);
+			string pal = leer.ReadLine ();
+			ancho = pal.Length;
 			int i = 1;
 			while(!(leer.EndOfStream)){
 				Console.ReadLine ();
 				i++;
 			}
+			leer.Close ();
 			return i-1;
 		}
 		public static void Main (string[] args) {
