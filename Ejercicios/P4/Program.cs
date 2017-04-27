@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace P4 {
 	class Tablero{
@@ -27,9 +28,26 @@ namespace P4 {
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;	
 
+		public Tablero(String nombre){
+			
+		}
 
 		public static void Main (string[] args) {
-			ListaPares l = new ListaPares ();
+			
 		}
+
+		public void Dibuja(){}
+
+		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
+			return false;
+		}
+
+		public void MuevePacman(){}
+
+		public bool CambiaDir(char c){return false;}
+
+		public void LeeInput(ref char dir){}
+			
+
 	}
 }
