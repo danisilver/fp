@@ -28,6 +28,7 @@ namespace P4 {
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;	
 
+
 		Tablero(string archivo){
 			FILS = getDim (archivo, out COLS);
 			StreamReader leer = new StreamReader(archivo);
@@ -56,8 +57,23 @@ namespace P4 {
 			leer.Close ();
 			return i-1;
 		}
+
 		public static void Main (string[] args) {
-			ListaPares l = new ListaPares ();
+			
 		}
+
+		public void Dibuja(){}
+
+		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
+			return false;
+		}
+
+		public void MuevePacman(){}
+
+		public bool CambiaDir(char c){return false;}
+
+		public void LeeInput(ref char dir){}
+			
+
 	}
 }
