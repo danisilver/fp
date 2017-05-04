@@ -52,28 +52,28 @@ namespace P4 {
 						cas[i,j]=Casilla.MuroCelda;
 						break;
 					case'5':
-						pers [0].posX = i;
-						pers [0].posY = j;
+						pers [1].posX = pers[1].defX = i;
+						pers [1].posY = pers[1].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
 					case'6':
-						pers [1].posX = i;
-						pers [1].posY = j;
+						pers [2].posX=pers[2].defX = i;
+						pers [2].posY = pers[2].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
 					case'7':
-						pers [2].posX = i;
-						pers [2].posY = j;
+						pers [3].posX = pers[3].defX = i;
+						pers [3].posY = pers[3].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
 					case'8':
-						pers [3].posX = i;
-						pers [3].posY = j;
+						pers [4].posX = pers[4].defX = i;
+						pers [4].posY = pers[4].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
 					case'9':
-						pers [4].posX = i;
-						pers [4].posY = j;
+						pers [0].posX = pers[0].defX = i;
+						pers [0].posY = pers[0].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
 					default:
@@ -107,8 +107,18 @@ namespace P4 {
 		public void Dibuja(){}
 
 		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
-			nx = ny = 0;
-			return false;
+			nx = x + dx;
+			if (nx == COLS)
+				nx = 0;
+			else if (nx < 0)
+				nx = COLS - 1;
+			ny = y + dy;
+			if (ny == FILS)
+				ny = 0;
+			else if (ny < 0)
+				ny = FILS - 1;
+			
+			return (cas[nx,ny]!=Casilla.Muro && cas[nx,ny]!=Casilla.MuroCelda);
 		}
 
 		public void MuevePacman(){}
