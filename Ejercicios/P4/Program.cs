@@ -31,20 +31,61 @@ namespace P4 {
 
 		Tablero(string archivo){
 			FILS = getDim (archivo, out COLS);
+			pers = new Personaje[5];
 			StreamReader leer = new StreamReader(archivo);
 			for (int i = 0; i < COLS; i++) {
 				for (int j = 0; j < FILS; j++) {
 					switch (leer.Read ()) {
-					case '0':
-						cas [i, j] = Casilla.Blanco;
+
+					case'0':
+						cas[i,j]=Casilla.Blanco;
 						break;
-					case '1':
-						cas[i,j]=Casilla.Muro;
+					case'1':
+						cas [i, j] = Casilla.Muro;
+						break;
+					case'2':
+						cas[i,j]=Casilla.Comida;
+						break;
+					case'3':
+						cas[i,j]=Casilla.Vitamina;
+						break;
+					case'4':
+						cas[i,j]=Casilla.MuroCelda;
+						break;
+					case'5':
+						pers [1].posX = pers[1].defX = i;
+						pers [1].posY = pers[1].defY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'6':
+						pers [2].posX=pers[2].defX = i;
+						pers [2].posY = pers[2].defY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'7':
+						pers [3].posX = pers[3].defX = i;
+						pers [3].posY = pers[3].defY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'8':
+						pers [4].posX = pers[4].defX = i;
+						pers [4].posY = pers[4].defY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'9':
+						pers [0].posX = pers[0].defX = i;
+						pers [0].posY = pers[0].defY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					default:
 						break;
 					}
 				}
 			}
-
+			if (Debug)
+				rnd = new Random (100);
+			else
+				rnd = new Random ();
 			leer.Close ();
 		}
 		static int getDim(string archivo,out int ancho){
@@ -119,8 +160,18 @@ namespace P4 {
 		}
 
 		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
-			nx = 0; ny = 0;
-			return false;
+			nx = x + dx;
+			if (nx == COLS)
+				nx = 0;
+			else if (nx < 0)
+				nx = COLS - 1;
+			ny = y + dy;
+			if (ny == FILS)
+				ny = 0;
+			else if (ny < 0)
+				ny = FILS - 1;
+			
+			return (cas[nx,ny]!=Casilla.Muro && cas[nx,ny]!=Casilla.MuroCelda);
 		}
 
 		public void muevePacman(){
