@@ -31,18 +31,60 @@ namespace P4 {
 
 		Tablero(string archivo){
 			FILS = getDim (archivo, out COLS);
+			pers = new Personaje[5];
 			StreamReader leer = new StreamReader(archivo);
 			for (int i = 0; i < COLS; i++) {
 				for (int j = 0; j < FILS; j++) {
 					switch (leer.Read ()) {
-					case('0'):
+					case'0':
 						cas[i,j]=Casilla.Blanco;
-					case('1'):
-						cas[i,j]=Casilla.Muro;
+						break;
+					case'1':
+						cas [i, j] = Casilla.Muro;
+						break;
+					case'2':
+						cas[i,j]=Casilla.Comida;
+						break;
+					case'3':
+						cas[i,j]=Casilla.Vitamina;
+						break;
+					case'4':
+						cas[i,j]=Casilla.MuroCelda;
+						break;
+					case'5':
+						pers [0].posX = i;
+						pers [0].posY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'6':
+						pers [1].posX = i;
+						pers [1].posY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'7':
+						pers [2].posX = i;
+						pers [2].posY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'8':
+						pers [3].posX = i;
+						pers [3].posY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					case'9':
+						pers [4].posX = i;
+						pers [4].posY = j;
+						cas[i,j]=Casilla.Blanco;
+						break;
+					default:
+						break;
 					}
 				}
 			}
-
+			if (Debug)
+				rnd = new Random (100);
+			else
+				rnd = new Random ();
 			leer.Close ();
 		}
 		static int getDim(string archivo,out int ancho){
@@ -65,6 +107,7 @@ namespace P4 {
 		public void Dibuja(){}
 
 		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
+			nx = ny = 0;
 			return false;
 		}
 
