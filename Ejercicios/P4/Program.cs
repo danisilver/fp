@@ -32,11 +32,11 @@ namespace P4 {
 		Tablero(string archivo){
 			FILS = getDim (archivo, out COLS);
 			pers = new Personaje[5];
+			cas = new Casilla[COLS, FILS];
 			StreamReader leer = new StreamReader(archivo);
 			for (int i = 0; i < COLS; i++) {
 				for (int j = 0; j < FILS; j++) {
 					switch (leer.Read ()) {
-
 					case'0':
 						cas[i,j]=Casilla.Blanco;
 						break;
@@ -91,10 +91,10 @@ namespace P4 {
 		static int getDim(string archivo,out int ancho){
 			StreamReader leer = new StreamReader(archivo);
 			string pal = leer.ReadLine ();
-			ancho = pal.Length;
+			ancho = pal.Length/2 +pal.Length%2;
 			int i = 1;
 			while(!(leer.EndOfStream)){
-				Console.ReadLine ();
+				leer.ReadLine ();
 				i++;
 			}
 			leer.Close ();
@@ -102,9 +102,10 @@ namespace P4 {
 		}
 
 		public static void Main (string[] args) {
-			Tablero t = new Tablero("");
+			Tablero t = new Tablero("level00.dat");
 			t.Dibuja();
-			int lap = 200; // retardo para bucle ppal
+			Console.Read ();
+			/*int lap = 200; // retardo para bucle ppal
 			char c= ' ';
 			while (true) {
 				leeInput(ref c);
@@ -113,14 +114,14 @@ namespace P4 {
 				// IA de los fantasmas: TODO
 				t.Dibuja();
 				System.Threading.Thread.Sleep (lap);
-			}
+			}*/
 		}
 
 		public void Dibuja(){
-			for (int i = 0; i < FILS; i++) {
-				for (int j = 0; j < COLS; j++) {
+			for (int i = 0; i < COLS; i++) {
+				for (int j = 0; j < FILS; j++) {
 					Console.ResetColor ();
-					Console.SetCursorPosition (j, i);
+					Console.SetCursorPosition (i, j);
 					switch (cas[i,j]) {
 					case Casilla.Blanco:
 					case Casilla.Comida:
@@ -145,12 +146,12 @@ namespace P4 {
 				}
 			}
 
-			Console.SetCursorPosition (pers [0].posY, pers [0].posX);
+			Console.SetCursorPosition (pers [0].posX, pers [0].posY);
 			Console.BackgroundColor = colors[0];
 			Console.Write ("C");
 
 			for (int i = 1; i < pers.Length; i++) {
-				Console.SetCursorPosition (pers [i].posY, pers [i].posX);
+				Console.SetCursorPosition (pers [i].posX, pers [i].posY);
 				Console.BackgroundColor = colors [i];
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.Write (i);
