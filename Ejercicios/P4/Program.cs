@@ -160,7 +160,7 @@ namespace P4 {
 
 		}
 
-		public bool Siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
+		public bool siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
 			nx = x + dx;
 			if (nx == COLS)
 				nx = 0;
@@ -176,10 +176,38 @@ namespace P4 {
 		}
 
 		public void muevePacman(){
-			
+			int nx, ny;
+			if (siguiente (pers [0].posX, pers [0].posY, pers[0].dirX, pers[0].dirY, out nx, out ny)) {
+				pers [0].posX = nx;
+				pers [0].posY = ny;
+			}
+
+			if (cas [pers [0].posX, pers [0].posY] == Casilla.Comida ||
+				cas [pers [0].posX, pers [0].posY] == Casilla.Vitamina) {
+				numComida--;
+				cas [pers [0].posX, pers [0].posY] = Casilla.Blanco;
+			}
 		}
 
-		public bool cambiaDir(char c){return false;}
+		public bool cambiaDir(char c){
+			int dx, dy;
+			dx = dy = 0;
+			if (c == 'l')
+				dy = -1;
+			if (c == 'r')
+				dy = 1;
+			if (c == 'u')
+				dx = -1;
+			if (c == 'd')
+				dx = 1;
+			int nx, ny;
+			if(siguiente(pers[0].posX, pers[0].posY, dx, dy, out nx, out ny)){
+				pers [0].dirX = dx;
+				pers [0].dirY = dy;
+				return true;
+			};
+			return false;
+		}
 
 		public static void leeInput(ref char dir){
 			char letra = ' ';
@@ -204,11 +232,72 @@ namespace P4 {
 		}
 
 		// determina si hay algún fantasma en la misma posición que Pacman.
-		public void captura(){}
+		public void captura(){
+			for (int i = 1; i < pers.Length; i++) {
+				if (pers [0].posX == pers [i].dirX && pers [0].posY == pers [i].posY)
+					return true;
+			}
+			return false;
+		}
 
 		// comprueba si Pacman se ha comido toda la comida del nivel. Esto es inme-
 		// diato utilizando el atributo numComida.
-		public void finNivel(){}
+		public void finNivel(){
+			numComida <= 0;
+		}
+
+		//determina si la posición (x,y) contiene un fantasma.
+		public bool hayFantasma(int x, int y){
+			for (int i = 1; i < pers.Length; i++) {
+				if (pers [i].posX == x && pers [i].posY == y)
+					return true;
+			}
+
+			return false;
+		}
+
+		public void posiblesDirs(int fant, out ListaPares l, out int cont){
+			l = new ListaPares ();
+			cont = 0;
+			for (int i = 1; i < 4; i++) {
+				int nx, ny;
+				if(siguiente(pers[i].posX, pers[i].posY, 2 - i, 0, out nx, out ny)){
+					l.insertaFin(2 - i, 0);
+					cont++;
+				}
+				if(siguiente(pers[i].posX, pers[i].posY, 0, 2 - i, out nx, out ny)){
+					l.insertaFin(0, 2 - i);
+					cont++;
+				}
+			}
+
+		}
+
+		public void seleccionaDir(int fant){
+			ListaPares l;
+			int cont;
+			posiblesDirs (fant, out l, out cont);
+			l.nEsimo (rnd.Next (0, cont), pers [fant].dirX, pers [fant].dirY);
+		}
+
+		public void eliminaMuroFantasmas(){
+			for (int i = 0; i < cas.GetLength(0); i++) {
+				for (int j = 0; j < cas.GetLength(1); j++) {
+					if (cas [i, j] == Casilla.MuroCelda)
+						cas [i, j] = Casilla.Blanco;
+				}
+			}
+		}
+
+		void mueveFantasmas(int lap){
+			for (int i = 1; i < pers.Length; i++) {
+				if (!cas [pers [i].posX + pers [i].dirX, pers [i].posY += pers [i].dirY] == Casilla.Muro) {
+					pers [i].posX += pers [i].dirX;
+					pers [i].posY += pers [i].dirY;
+				}
+				seleccionaDir (i);
+			}
+		}
 
 	}
 }
