@@ -111,12 +111,11 @@ namespace P4 {
 			t.Dibuja();
 			int lap = 200; // retardo para bucle ppal
 			char c= ' ';
-			while (!t.finNivel()) {
+			while (!t.finNivel() && !t.captura()) {
 				leeInput(ref c);
 				if (c != ' ' && t.cambiaDir(c)) c=' ';
 				t.muevePacman();
 				t.mueveFantasmas(lap);
-				// IA de los fantasmas: TODO
 				t.Dibuja();
 				System.Threading.Thread.Sleep (lap);
 			}
@@ -241,7 +240,7 @@ namespace P4 {
 		// determina si hay algún fantasma en la misma posición que Pacman.
 		public bool captura(){
 			for (int i = 1; i < pers.Length; i++) {
-				if (pers [0].posX == pers [i].dirX && pers [0].posY == pers [i].posY)
+				if (pers [0].posX == pers [i].posX && pers [0].posY == pers [i].posY)
 					return true;
 			}
 			return false;
@@ -266,26 +265,29 @@ namespace P4 {
 		public void posiblesDirs(int fant, out ListaPares l, out int cont){
 			l = new ListaPares ();
 			cont = 0;
-			for (int i = 1; i < 4; i++) {
+			for (int i = -1; i < 2; i+=2) {
 				int nx, ny;
-				if(siguiente(pers[i].posX, pers[i].posY, 2 - i, 0, out nx, out ny)){
-					l.insertaFin(2 - i, 0);
+				if(siguiente(pers[fant].posX, pers[fant].posY, i, 0, out nx, out ny)){
+					l.insertaFin(i, 0);
 					cont++;
 				}
-				if(siguiente(pers[i].posX, pers[i].posY, 0, 2 - i, out nx, out ny)){
-					l.insertaFin(0, 2 - i);
+				if(siguiente(pers[fant].posX, pers[fant].posY, 0, i, out nx, out ny)){
+					l.insertaFin(0, i);
 					cont++;
-				}
+				} 
 			}
 
+			if (cont > 1) {
+				if (l.eliminaElto(-pers[fant].dirX, -pers[fant].dirY)) cont--;
+			}
 		}
 
 		public void seleccionaDir(int fant){
 			ListaPares l;
 			int cont;
 			posiblesDirs (fant, out l, out cont);
-			l.nEsimo (rnd.Next (0, cont), out pers [fant].dirX,out pers [fant].dirY);
-		}
+			l.nEsimo (rnd.Next (0, cont), out pers [fant].dirX, out pers [fant].dirY);
+			}
 
 		public void eliminaMuroFantasmas(){
 			for (int i = 0; i < cas.GetLength(0); i++) {
@@ -300,11 +302,12 @@ namespace P4 {
 			lapFantasmas -= lap;
 			if (lapFantasmas <= 0) eliminaMuroFantasmas();
 			for (int i = 1; i < pers.Length; i++) {
-				seleccionaDir (i);
-				if (!(cas [pers [i].posX + pers [i].dirX, pers [i].posY += pers [i].dirY] == Casilla.Muro)) {
-					pers [i].posX += pers [i].dirX;
-					pers [i].posY += pers [i].dirY;
+				int nx, ny;
+				if (siguiente(pers[i].posX, pers[i].posY, pers[i].dirX, pers[i].dirY, out nx, out ny) ){
+					pers [i].posX = nx;
+					pers [i].posY = ny;
 				}
+				seleccionaDir (i);
 			}
 		}
 
