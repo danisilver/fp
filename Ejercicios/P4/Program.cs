@@ -20,9 +20,9 @@ namespace P4 {
 		Personaje [] pers;
 		// colores para los personajes
 		ConsoleColor [] colors = { ConsoleColor.DarkYellow, ConsoleColor.Red, ConsoleColor.Magenta, ConsoleColor.Cyan, ConsoleColor.DarkBlue };
-		int lapFantasmas; // tiempo de retardo de salida del los fantasmas
+		int lapFantasmas = 3000; 
 		int numComida; // numero de casillas retantes con comida o vitamina
-		int numNivel; // nivel actual de juego
+		//int numNivel; // nivel actual de juego
 		
 		Random rnd;
 		// flag para mensajes de depuracion en consola
@@ -31,48 +31,53 @@ namespace P4 {
 
 		Tablero(string archivo){
 			FILS = getDim (archivo, out COLS);
+			numComida = 0;
 			pers = new Personaje[5];
-			cas = new Casilla[COLS, FILS];
+			cas = new Casilla[FILS, COLS];
 			StreamReader leer = new StreamReader(archivo);
-			for (int i = 0; i < COLS; i++) {
-				for (int j = 0; j < FILS; j++) {
-					switch (leer.Read ()) {
-					case'0':
+			for (int i = 0; i < FILS; i++) {
+				string linea = leer.ReadLine().Replace(" ", "");
+				for (int j = 0; j < COLS; j++) {
+					switch (linea[j]) {
+						case ' ':
+					case '0':
 						cas[i,j]=Casilla.Blanco;
 						break;
-					case'1':
+					case '1':
 						cas [i, j] = Casilla.Muro;
 						break;
-					case'2':
+					case '2':
 						cas[i,j]=Casilla.Comida;
+							numComida++;
 						break;
-					case'3':
+					case '3':
 						cas[i,j]=Casilla.Vitamina;
+							numComida++;
 						break;
-					case'4':
+					case '4':
 						cas[i,j]=Casilla.MuroCelda;
 						break;
-					case'5':
+					case '5':
 						pers [1].posX = pers[1].defX = i;
 						pers [1].posY = pers[1].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
-					case'6':
+					case '6':
 						pers [2].posX=pers[2].defX = i;
 						pers [2].posY = pers[2].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
-					case'7':
+					case '7':
 						pers [3].posX = pers[3].defX = i;
 						pers [3].posY = pers[3].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
-					case'8':
+					case '8':
 						pers [4].posX = pers[4].defX = i;
 						pers [4].posY = pers[4].defY = j;
 						cas[i,j]=Casilla.Blanco;
 						break;
-					case'9':
+					case '9':
 						pers [0].posX = pers[0].defX = i;
 						pers [0].posY = pers[0].defY = j;
 						cas[i,j]=Casilla.Blanco;
@@ -91,7 +96,7 @@ namespace P4 {
 		static int getDim(string archivo,out int ancho){
 			StreamReader leer = new StreamReader(archivo);
 			string pal = leer.ReadLine ();
-			ancho = pal.Length/2 +pal.Length%2;
+			ancho = pal.Replace(" ", "").Length;
 			int i = 1;
 			while(!(leer.EndOfStream)){
 				leer.ReadLine ();
@@ -104,26 +109,28 @@ namespace P4 {
 		public static void Main (string[] args) {
 			Tablero t = new Tablero("level00.dat");
 			t.Dibuja();
-			Console.Read ();
-			/*int lap = 200; // retardo para bucle ppal
+			int lap = 200; // retardo para bucle ppal
 			char c= ' ';
-			while (true) {
+			while (!t.finNivel()) {
 				leeInput(ref c);
 				if (c != ' ' && t.cambiaDir(c)) c=' ';
 				t.muevePacman();
+				t.mueveFantasmas(lap);
 				// IA de los fantasmas: TODO
 				t.Dibuja();
 				System.Threading.Thread.Sleep (lap);
-			}*/
+			}
 		}
 
 		public void Dibuja(){
-			for (int i = 0; i < COLS; i++) {
-				for (int j = 0; j < FILS; j++) {
+			Console.Clear();
+			for (int i = 0; i < FILS; i++) {
+				for (int j = 0; j < COLS; j++) {
 					Console.ResetColor ();
-					Console.SetCursorPosition (i, j);
+					Console.SetCursorPosition (j, i);
 					switch (cas[i,j]) {
 					case Casilla.Blanco:
+							break;
 					case Casilla.Comida:
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.Write (".");
@@ -146,33 +153,34 @@ namespace P4 {
 				}
 			}
 
-			Console.SetCursorPosition (pers [0].posX, pers [0].posY);
+			Console.SetCursorPosition (pers [0].posY, pers [0].posX);
 			Console.BackgroundColor = colors[0];
 			Console.Write ("C");
 
 			for (int i = 1; i < pers.Length; i++) {
-				Console.SetCursorPosition (pers [i].posX, pers [i].posY);
+				Console.SetCursorPosition (pers [i].posY,pers [i].posX);
 				Console.BackgroundColor = colors [i];
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.Write (i);
 			}
 
+			Console.ResetColor();
 
 		}
 
 		public bool siguiente(int x, int y, int dx, int dy, out int nx, out int ny){
 			nx = x + dx;
-			if (nx == COLS)
+			if (nx == FILS)
 				nx = 0;
 			else if (nx < 0)
-				nx = COLS - 1;
+				nx = FILS - 1;
 			ny = y + dy;
-			if (ny == FILS)
+			if (ny == COLS)
 				ny = 0;
 			else if (ny < 0)
-				ny = FILS - 1;
+				ny = COLS - 1;
 			
-			return (cas[nx,ny]!=Casilla.Muro && cas[nx,ny]!=Casilla.MuroCelda);
+			return (cas[nx, ny] != Casilla.Muro && cas[nx, ny] != Casilla.MuroCelda);
 		}
 
 		public void muevePacman(){
@@ -210,7 +218,6 @@ namespace P4 {
 		}
 
 		public static void leeInput(ref char dir){
-			char letra = ' ';
 			if (Console.KeyAvailable) {
 				switch (Console.ReadKey (true).Key.ToString ()) {
 				case "RightArrow":
@@ -290,12 +297,14 @@ namespace P4 {
 		}
 
 		void mueveFantasmas(int lap){
+			lapFantasmas -= lap;
+			if (lapFantasmas <= 0) eliminaMuroFantasmas();
 			for (int i = 1; i < pers.Length; i++) {
+				seleccionaDir (i);
 				if (!(cas [pers [i].posX + pers [i].dirX, pers [i].posY += pers [i].dirY] == Casilla.Muro)) {
 					pers [i].posX += pers [i].dirX;
 					pers [i].posY += pers [i].dirY;
 				}
-				seleccionaDir (i);
 			}
 		}
 
