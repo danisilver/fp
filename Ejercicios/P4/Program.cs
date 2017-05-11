@@ -7,13 +7,11 @@ namespace P4 {
 		int FILS, COLS;
 
 		enum Casilla {
-Blanco,
+			Blanco,
 			Muro,
 			Comida,
 			Vitamina,
 			MuroCelda}
-
-		;
 
 		Casilla[,] cas;
 
@@ -39,14 +37,14 @@ Blanco,
 		int lapFantasmas = 3000;
 		int numComida;
 		// numero de casillas retantes con comida o vitamina
-		int numNivel;
+		public int numNivel;
 		// nivel actual de juego
 
 		Random rnd;
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;
 
-		Tablero (string archivo) {
+		public Tablero (string archivo) {
 			FILS = getDim (archivo, out COLS);
 			numComida = 0;
 			pers = new Personaje[5];
@@ -126,95 +124,6 @@ Blanco,
 			return i - 1;
 		}
 
-		public static void Main (string[] args) {
-			Tablero t = new Tablero ("level00.dat");
-			int lap = 200; // retardo para bucle ppal
-			char c = ' ';
-
-			Console.WriteLine ("c parar cargar");
-			if (Console.ReadKey (true).KeyChar == 'c') 
-				t = new Tablero ("guardar.txt");
-
-			t.Dibuja ();
-			while (!t.finNivel () && !t.captura ()) {
-				leeInput (ref c);
-				if (c == 'g') {
-					t.guardar ("guardar.txt");
-				}
-				if (c != ' ' && t.cambiaDir(c)) c=' ';
-				t.muevePacman ();
-				t.mueveFantasmas (lap);
-				t.Dibuja ();
-				System.Threading.Thread.Sleep (lap);
-			}
-
-			/*
-			 * 
-            Console.WriteLine("Bienvenido a PACMAN\nPulsa C para cargar una partida o pulsa N para empezar una nueva partida");
-            bool valid = false;
-            string resp = "";
-            Tablero t = new Tablero("level00.dat");
-            while (!valid)
-            {
-                resp = Console.ReadLine();
-                if (resp == "c" || resp == "n")
-                    valid = true;
-                else Console.WriteLine("Respuesta no válida");
-            }
-            if (resp == "n")
-                t = new Tablero("level00.dat");
-            else
-            {
-                bool valid2 = false;
-                while (!valid2)
-                {
-                    valid2 = true;
-                    Console.WriteLine("Introduce el nombre de la partida");
-                    string r = Console.ReadLine();
-                    try
-                    {
-                        t = new Tablero(r);
-                    }
-                    catch
-                    {
-                        Console.WriteLine("Esta partida no existe");
-                        valid2 = false;
-                    }
-                }
-            }
-            t.Dibuja();
-            int lap = 200; // retardo para bucle ppal
-            char c = ' ';
-            bool capture = false;
-            while (!capture)
-            {
-                while (!t.finNivel()&& !capture)
-                {
-                    leeInput(ref c);
-                    if (c != ' ' && t.cambiaDir(c)) c = ' ';
-                    t.muevePacman();
-                    capture = t.captura();
-                    t.mueveFantasmas(lap);
-                    if (!capture)
-                        capture = t.captura();
-                    t.Dibuja();
-                    System.Threading.Thread.Sleep(lap);
-                }
-                if (!capture)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Has completado el nivel");
-                    Console.ReadKey();
-                    Tablero t2 = new Tablero("Tablero0" + t.numNivel + 1 + ".dat");
-                    t = t2;
-                }
-            }
-            Console.Clear();
-            Console.WriteLine("FIN DE LA PARTIDA");
-            Console.ReadKey();
-        }
-			 * */
-		}
 
 		public void Dibuja () {
 			//Console.Clear();
@@ -260,6 +169,11 @@ Blanco,
 			}
 
 			Console.ResetColor ();
+
+			Console.SetCursorPosition (0, FILS);
+			Console.WriteLine ("pulsa p para pausar");
+			Console.WriteLine ("pulsa q para salir");
+			Console.WriteLine ("NIVEL ACTUAL "+ numNivel);
 		}
 
 		public bool siguiente (int x, int y, int dx, int dy, out int nx, out int ny) {
@@ -273,9 +187,7 @@ Blanco,
 				ny = 0;
 			else if (ny < 0)
 				ny = COLS - 1;
-			if (dx == 0 && dy == 0)
-				return true;
-			return (cas [nx, ny] != Casilla.Muro && cas [nx, ny] != Casilla.MuroCelda);
+			return (cas [nx, ny] != Casilla.Muro && cas [nx, ny] != Casilla.MuroCelda) && !hayFantasma(nx,ny);
 		}
 
 		public void muevePacman () {
@@ -299,10 +211,12 @@ Blanco,
 				dy = -1;
 			if (c == 'r')
 				dy = 1;
+			
 			if (c == 'u')
 				dx = -1;
 			if (c == 'd')
 				dx = 1;
+			
 			int nx, ny;
 			if (siguiente (pers [0].posX, pers [0].posY, dx, dy, out nx, out ny)) {
 				pers [0].dirX = dx;
@@ -310,30 +224,6 @@ Blanco,
 				return true;
 			}
 			return false;
-		}
-
-		public static void leeInput (ref char dir) {
-			if (Console.KeyAvailable) {
-				switch (Console.ReadKey (true).Key.ToString ()) {
-				case "RightArrow":
-					dir = 'r';
-					break;
-				case "LeftArrow":
-					dir = 'l';
-					break;
-				case "UpArrow":
-					dir = 'u';
-					break;
-				case "DownArrow":
-					dir = 'd';
-					break;
-				case "G":
-					dir = 'g';
-					break;
-				default:
-					break;
-				}
-			}
 		}
 
 		// determina si hay algún fantasma en la misma posición que Pacman.
@@ -398,7 +288,7 @@ Blanco,
 			}
 		}
 
-		void mueveFantasmas (int lap) {
+		public void mueveFantasmas (int lap) {
 			lapFantasmas -= lap;
 			if (lapFantasmas <= 0)
 				eliminaMuroFantasmas ();
@@ -414,42 +304,44 @@ Blanco,
 
 		public void guardar (string nombreArchivo) {
 			StreamWriter sw = new StreamWriter (nombreArchivo);
+			char[][] temp = new char[FILS][];
 			for (int i = 0; i < FILS; i++) {
+				temp[i] = new char[COLS];
 				for (int j = 0; j < COLS; j++) {
 					switch (cas [i, j]) {
 					case	 Casilla.Blanco:
-						bool encontrado = false;
-						for (int k = 0; k < pers.Length; k++) {
-							if (pers [k].posX == i && pers [k].posY == j) {
-								if (k == 0)
-									sw.Write ("9");
-								else
-									sw.Write ("" + (k + 4));
-								encontrado = true;
-							} 
-
-						}
-						if (!encontrado)
-							sw.Write ("0");
-						
+							temp[i][j]= '0';
 						break;
 					case	 Casilla.Muro:
-						sw.Write ("1");
+							temp[i][j] = '1';
 						break;
 					case	 Casilla.MuroCelda:
-						sw.Write ("4");
+							temp[i][ j] = '4';
 						break;
 					case	 Casilla.Comida:
-						sw.Write ("2");
+							temp[i][j] = '2';
 						break;
 					case	 Casilla.Vitamina:
-						sw.Write ("3");
+							temp[i][j] = '3';
 						break;
 					default:
 						break;
 					}
 				}
-				sw.WriteLine ();
+			}
+
+			temp[pers[0].posX][pers[0].posY] = '9';
+
+			temp[pers[1].posX][pers[1].posY] = '5';
+			temp[pers[2].posX][pers[2].posY] = '6';
+			temp[pers[3].posX][pers[3].posY] = '7';
+			temp[pers[4].posX][pers[4].posY] = '8';
+
+
+
+			for (int i = 0; i < FILS; i++) {
+				sw.WriteLine(new string(temp[i]));
+
 			}
 			sw.Write ("" + numNivel);
 			sw.Close ();
