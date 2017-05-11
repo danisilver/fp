@@ -41,7 +41,7 @@ Blanco,
 		// numero de casillas retantes con comida o vitamina
 		int numNivel;
 		// nivel actual de juego
-		
+
 		Random rnd;
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;
@@ -148,7 +148,72 @@ Blanco,
 				System.Threading.Thread.Sleep (lap);
 			}
 
-
+			/*
+			 * 
+            Console.WriteLine("Bienvenido a PACMAN\nPulsa C para cargar una partida o pulsa N para empezar una nueva partida");
+            bool valid = false;
+            string resp = "";
+            Tablero t = new Tablero("level00.dat");
+            while (!valid)
+            {
+                resp = Console.ReadLine();
+                if (resp == "c" || resp == "n")
+                    valid = true;
+                else Console.WriteLine("Respuesta no válida");
+            }
+            if (resp == "n")
+                t = new Tablero("level00.dat");
+            else
+            {
+                bool valid2 = false;
+                while (!valid2)
+                {
+                    valid2 = true;
+                    Console.WriteLine("Introduce el nombre de la partida");
+                    string r = Console.ReadLine();
+                    try
+                    {
+                        t = new Tablero(r);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Esta partida no existe");
+                        valid2 = false;
+                    }
+                }
+            }
+            t.Dibuja();
+            int lap = 200; // retardo para bucle ppal
+            char c = ' ';
+            bool capture = false;
+            while (!capture)
+            {
+                while (!t.finNivel()&& !capture)
+                {
+                    leeInput(ref c);
+                    if (c != ' ' && t.cambiaDir(c)) c = ' ';
+                    t.muevePacman();
+                    capture = t.captura();
+                    t.mueveFantasmas(lap);
+                    if (!capture)
+                        capture = t.captura();
+                    t.Dibuja();
+                    System.Threading.Thread.Sleep(lap);
+                }
+                if (!capture)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Has completado el nivel");
+                    Console.ReadKey();
+                    Tablero t2 = new Tablero("Tablero0" + t.numNivel + 1 + ".dat");
+                    t = t2;
+                }
+            }
+            Console.Clear();
+            Console.WriteLine("FIN DE LA PARTIDA");
+            Console.ReadKey();
+        }
+			 * */
 		}
 
 		public void Dibuja () {
