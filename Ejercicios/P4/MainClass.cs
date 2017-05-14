@@ -10,7 +10,12 @@ namespace P4 {
 
 		public static void Main (string[] args) {
 
-			Console.WriteLine("Bienvenido a PACMAN\nPulsa c para cargar una partida\npulsa C para cargar tus logros\npulsa n para empezar una nueva partida\npulsa r para ver la lista de jugadores\n cualquier otra tecla para salir");
+			Console.WriteLine("Bienvenido a PACMAN\nPulsa c para cargar una partida\n" +
+				"pulsa C para cargar tus logros\n" +
+				"pulsa n para empezar una nueva partida\n" +
+				"pulsa r para ver la lista de jugadores\n" +
+				"pulsa d para abrir el diseñador de niveles\n" +
+				"cualquier otra tecla para salir");
 			char tecla = Console.ReadKey (true).KeyChar;
 
 			Tablero t;
@@ -37,6 +42,18 @@ namespace P4 {
 				t = new Tablero ("level00.dat");
 			} else if (tecla == 'r') {
 				mostrarJugadores ();
+				return;
+			} else if (tecla == 'd') {
+				Console.WriteLine ("Escribe el nombre del fichero");
+				string fichero = Console.ReadLine ();
+				Console.Write("FILAS: ");
+				int filas = int.Parse(Console.ReadLine ());
+				Console.Write("COLUMNAS: ");
+				int columnas = int.Parse(Console.ReadLine ());
+				creaFicheroVacio (fichero,filas, columnas);
+				t = new Tablero (fichero);
+				t.setInteractivo (true);
+				constructorInteractivo (t);
 				return;
 			} else {
 				return;
@@ -117,7 +134,8 @@ namespace P4 {
 
 		public static void leeInput (ref char dir) {
 			if (Console.KeyAvailable) {
-				switch (Console.ReadKey (true).Key.ToString ()) {
+				ConsoleKeyInfo k = Console.ReadKey(true);
+				switch (k.Key.ToString()) {
 				case "RightArrow":
 					dir = 'r';
 					break;
@@ -130,20 +148,75 @@ namespace P4 {
 				case "DownArrow":
 					dir = 'd';
 					break;
-				case "G":
-					dir = 'g';
-					break;
-				case "P":
-					dir = 'p';
-					break;
-				case "Q":
-					dir = 'q';
-					break;
 				default:
+					dir = k.KeyChar;
 					break;
 				}
 			}
 		}
+
+		static void creaFicheroVacio(string nombre, int filas, int cols){
+			StreamWriter sw = new StreamWriter (nombre);
+			for (int i = 0; i < filas; i++) {
+				for (int j = 0; j < cols; j++) {
+					sw.Write ('0');
+				}
+				sw.WriteLine ();
+			}
+			sw.Write('0');
+			sw.Close ();
+		}
+
+		static void constructorInteractivo(Tablero t){
+			bool salir = false;
+			char tecla = ' ';
+			Console.Clear();
+			while (!salir) {
+				leeInput(ref tecla);
+				if (tecla == 'q') {
+					salir = true;
+				} else if (tecla == 'b') {
+					t.cambiaCasilla (Tablero.Casilla.Blanco);
+				} else if (tecla == 'm') {
+					t.cambiaCasilla (Tablero.Casilla.Muro);
+				} else if (tecla == 'v') {
+					t.cambiaCasilla (Tablero.Casilla.Vitamina);
+				} else if (tecla == 'c') {
+					t.cambiaCasilla (Tablero.Casilla.Comida);
+				} else if (tecla == 'x') {
+					t.cambiaCasilla (Tablero.Casilla.MuroCelda);
+				} else if (tecla == '1') {
+					t.cambiaPersonaje (1);
+				} else if (tecla == '2') {
+					t.cambiaPersonaje (2);
+				} else if (tecla == '3') {
+					t.cambiaPersonaje (3);
+				} else if (tecla == '4') {
+					t.cambiaPersonaje (4);
+				} else if(tecla == 'g'){
+					Console.Write ("Escribe el nombre de tu partida para guardar: ");
+					string partida = Console.ReadLine ();
+					t.guardar (partida);
+					Console.Write ("Escribe tu nombre:");
+				} else if (tecla == ' ') {
+					continue;
+				}
+				if (t.cambiaDir (tecla)) {
+					tecla = ' ';
+					t.muevePacman ();
+					t.Dibuja ();
+					Console.WriteLine ("b blanco\n" +
+						"m muro\n" +
+						"v vitamina\n" +
+						"c comida \n" +
+						"x murocelda\n" +
+						"1-4 fantasmas\n");
+				}
+
+				System.Threading.Thread.Sleep(200);
+			}
+		}
 	}
+
 }
 
