@@ -1,6 +1,6 @@
 ﻿using System;
 
-class ListaPares {
+public class ListaPares {
 	class Nodo {
 		public int x, y;
 		public Nodo sig;

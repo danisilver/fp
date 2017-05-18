@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace P4 {
-	class Tablero {
+	public class Tablero {
 		bool interactivo = false;
 		
 		int FILS, COLS;
@@ -14,9 +14,9 @@ namespace P4 {
 			Vitamina,
 			MuroCelda}
 
-		Casilla[,] cas;
+		public Casilla[,] cas;
 
-		struct Personaje {
+		public struct Personaje {
 			public int posX, posY;
 			// posicion del personaje
 			public int dirX, dirY;
@@ -382,5 +382,87 @@ namespace P4 {
 			interactivo = true;
 		}
 
-	}
+        #region Código para tests de unidad
+
+        /// <summary>
+        /// Crea un nuevo tablero de casillas vacías de las dimensiones indicadas.
+        /// Crea también el array de personajes (vacío)
+        /// </summary>
+        /// <param name="nFils">Número de filas del tablero</param>
+        /// <param name="nCols">Número de columnas del tablero</param>
+        public Tablero(int nFils, int nCols)
+        {
+            cas = new Casilla[nFils, nCols];
+            COLS = nCols;
+            FILS = nFils;
+            pers = new Personaje[5];
+            for (int i = 0; i < nFils; i++)
+                for (int j = 0; j < nCols; j++)
+                {
+                    cas[i, j] = Casilla.Blanco;
+                }
+        }
+
+        /// <summary>
+        /// Cambia el tipo de una casilla del tablero
+        /// </summary>
+        /// <param name="fila">Fila de la casilla</param>
+        /// <param name="columna">Columna de la casilla</param>
+        /// <param name="tipoCasilla">Tipo que se quiere poner en la casilla</param>
+        public void cambiaCasilla(int fila, int columna, Casilla tipoCasilla)
+        {
+            cas[fila, columna] = tipoCasilla;
+        }
+
+        /// <summary>
+        /// Establece el número de comidas del tablero
+        /// </summary>
+        /// <param name="actComida">Número de comidas que queremos que haya en el tablero</param>
+        public void setNumComida(int actComida)
+        {
+            numComida = actComida;
+        }
+
+        /// <summary>
+        /// Consulta el número de comidas que hay en el tablero
+        /// </summary>
+        /// <returns>El número de comidas del tablero</returns>
+        public int getNumComida()
+        {
+            return numComida;
+        }
+
+        /// <summary>
+        /// Establece la posición y dirección de un personaje en el tablero,
+        /// representado por la posición que ocupa en el array de personajes.
+        /// Recuerda que el 0 es pacman y el resto [1,4] son fantasmas
+        /// </summary>
+        /// <param name="nPersonaje">Posición que ocupa el personaje a establecer</param>
+        /// <param name="posX">Coordenada X</param>
+        /// <param name="posY">Coordenada Y</param>
+        /// <param name="dirX">Dirección X</param>
+        /// <param name="dirY">Dirección Y</param>
+        public void setPersonaje(int nPersonaje, int posX, int posY, int dirX, int dirY)
+        {
+            pers[nPersonaje].posX = posX;
+            pers[nPersonaje].posY = posY;
+            pers[nPersonaje].dirX = dirX;
+            pers[nPersonaje].dirY = dirY;
+        }
+
+        /// <summary>
+        /// Devuelve uno de los personajes del tablero,
+        /// representado por la posición que ocupa en el array de personajes.
+        /// Recuerda que el 0 es pacman y el resto [1,4] son fantasmas
+        /// </summary>
+        /// <param name="nPersonaje">Posición que ocupoa el personaje</param>
+        /// <returns>El personaje que hay en la posición indicada</returns>
+        public Personaje getPersonaje(int nPersonaje)
+        {
+            return pers[nPersonaje];
+        }
+
+        #endregion
+
+    }
 }
