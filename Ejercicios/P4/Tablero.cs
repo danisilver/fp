@@ -396,6 +396,7 @@ namespace P4 {
             COLS = nCols;
             FILS = nFils;
             pers = new Personaje[5];
+            rnd = new Random();
             for (int i = 0; i < nFils; i++)
                 for (int j = 0; j < nCols; j++)
                 {

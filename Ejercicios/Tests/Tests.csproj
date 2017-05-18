@@ -48,7 +48,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="CambiaDir.cs" />
+    <Compile Include="Captura.cs" />
+    <Compile Include="FinNivel.cs" />
+    <Compile Include="HayFantasma.cs" />
+    <Compile Include="MuevePacman.cs" />
+    <Compile Include="PosiblesDirs.cs" />
+    <Compile Include="Siguiente.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
