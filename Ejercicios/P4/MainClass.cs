@@ -205,9 +205,8 @@ namespace P4 {
 					string partida = Console.ReadLine ();
 					t.guardar (partida);
 					Console.Write ("Escribe tu nombre:");
-				} else if (tecla == ' ') {
-					continue;
-				}
+				} 
+
 				if (t.cambiaDir (tecla)) {
 					tecla = ' ';
 					t.muevePacman ();

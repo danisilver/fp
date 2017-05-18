@@ -250,11 +250,7 @@ namespace P4 {
 
 		// determina si hay algún fantasma en la misma posición que Pacman.
 		public bool captura () {
-			for (int i = 1; i < pers.Length; i++) {
-				if (pers [0].posX == pers [i].posX && pers [0].posY == pers [i].posY)
-					return true;
-			}
-			return false;
+			return hayFantasma (pers [0].posX, pers [0].posY);
 		}
 
 		// comprueba si Pacman se ha comido toda la comida del nivel. Esto es inme-
@@ -265,33 +261,36 @@ namespace P4 {
 
 		//determina si la posición (x,y) contiene un fantasma.
 		public bool hayFantasma (int x, int y) {
-			for (int i = 1; i < pers.Length; i++) {
-				if (pers [i].posX == x && pers [i].posY == y)
-					return true;
-			}
-
-			return false;
+			bool fantasma = false;
+			int i = 1;
+			while (!fantasma && i < pers.Length) {
+				if (pers [i].posX == x && pers [i].posY == y) fantasma = true;
+				i++;
+			}return fantasma;
 		}
 
 		public void posiblesDirs (int fant, out ListaPares l, out int cont) {
 			l = new ListaPares ();
-			cont = 0;
-			for (int i = -1; i < 2; i += 2) {
-				int nx, ny;
-				if (siguiente (pers [fant].posX, pers [fant].posY, i, 0, out nx, out ny)) {
-					l.insertaFin (i, 0);
-					cont++;
+			cont = 4;
+			l.insertaFin (1,0);
+			l.insertaFin (0,1);
+			l.insertaFin (-1,0);
+			l.insertaFin (0,-1);
+
+			l.iniciaRecorrido ();
+
+			int dx, dy;
+			int nx, ny;
+			while (l.dame_actual_y_avanza (out dx,out  dy)){
+				if(!siguiente (pers [fant].posX, pers [fant].posY, dx, dy, out nx, out ny)){
+					l.eliminaElto (dx, dy);
+					cont--;
 				}
-				if (siguiente (pers [fant].posX, pers [fant].posY, 0, i, out nx, out ny)) {
-					l.insertaFin (0, i);
-					cont++;
-				} 
 			}
 
-			if (cont > 1) {
+			if( cont > 1 ) 
 				if (l.eliminaElto (-pers [fant].dirX, -pers [fant].dirY))
 					cont--;
-			}
 		}
 
 		public void seleccionaDir (int fant) {
