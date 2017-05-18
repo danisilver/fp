@@ -130,7 +130,6 @@ namespace P4 {
 
 
 		public void Dibuja () {
-			//Console.Clear();
 			for (int i = 0; i < FILS; i++) {
 				for (int j = 0; j < COLS; j++) {
 					Console.ResetColor ();

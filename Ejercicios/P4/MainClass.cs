@@ -63,9 +63,9 @@ namespace P4 {
 			int lap = 200; // retardo para bucle ppal
 			char c = ' ';
 			bool capture = false;
-			while (!capture)
+			bool salir = false;
+			while (!capture && !salir)
 			{
-				bool salir = false;
 				while (!t.finNivel()&& !capture && !salir)
 				{
 					leeInput(ref c);
@@ -93,17 +93,23 @@ namespace P4 {
 					t.Dibuja();
 					System.Threading.Thread.Sleep(lap);
 				}
-				if (!capture)
+				if (!capture && !salir)
 				{
 					Console.Clear();
 					Console.WriteLine("Has completado el nivel");
 					Console.ReadKey();
-					Tablero t2 = new Tablero("level0" + (t.numNivel + 1) + ".dat");
+					Tablero t2;
+					t2 = t;
+					try {
+						t2 = new Tablero("level0" + (t.numNivel + 1) + ".dat");
+					} catch (FileNotFoundException ex) {
+						Console.WriteLine ("archivo no encontrado: " + ex.FileName);
+					}
 					t = t2;
 				}
 			}
 			Console.Clear();
-			Console.WriteLine("FIN DE LA PARTIDA");
+			Console.WriteLine("FIN DEL JUEGO");
 			Console.ReadKey();
 		}
 
@@ -171,6 +177,7 @@ namespace P4 {
 			bool salir = false;
 			char tecla = ' ';
 			Console.Clear();
+			t.Dibuja ();
 			while (!salir) {
 				leeInput(ref tecla);
 				if (tecla == 'q') {
