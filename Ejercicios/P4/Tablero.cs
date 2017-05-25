@@ -48,7 +48,7 @@ namespace P4 {
 
 		public Tablero (string archivo) {
 			celdas = new ListaPares ();
-			FILS = getDim (archivo, out COLS);
+			getDim (archivo, out COLS, out FILS);
 			numComida = 0;
 			pers = new Personaje[5];
 			cas = new Casilla[FILS, COLS];
@@ -115,7 +115,7 @@ namespace P4 {
 			leer.Close ();
 		}
 
-		static int getDim (string archivo, out int ancho) {
+		static void getDim (string archivo, out int ancho,out int alto) {
 			StreamReader leer = new StreamReader (archivo);
 			string pal = leer.ReadLine ();
 			ancho = pal.Replace (" ", "").Length;
@@ -125,7 +125,7 @@ namespace P4 {
 				i++;
 			}
 			leer.Close ();
-			return i - 1;
+			alto = i - 1;
 		}
 
 
@@ -379,7 +379,7 @@ namespace P4 {
 		}
 
 		public void setInteractivo(bool set){
-			interactivo = true;
+			interactivo = set;
 		}
 
         #region Código para tests de unidad

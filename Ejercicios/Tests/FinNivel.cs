@@ -23,7 +23,7 @@ namespace Tests
 
             //Assert
             Assert.AreEqual(0, numcomida, "Fallo, aun hay comida");
-            Assert.AreEqual(true, fin, "Fallo, no hay comida y termino la partida");
+            Assert.AreEqual(true, fin, "Fallo, no hay comida y no termino la partida");
         }
     }
 }

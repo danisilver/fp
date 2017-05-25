@@ -20,5 +20,17 @@ namespace Tests
             //Assert
             Assert.IsTrue(hayfantasma, "Fallo: fantasma no detectado");
         }
+        [TestMethod]
+        public void TestNoHayFantasmaEnCasilla()
+        {
+            //Arrange
+            Tablero t = new Tablero(3, 3);
+
+            //Act
+            bool hayfantasma = t.hayFantasma(0, 1);
+
+            //Assert
+            Assert.IsFalse(hayfantasma, "Fallo: fantasma detectado");
+        }
     }
 }

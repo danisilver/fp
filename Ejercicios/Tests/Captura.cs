@@ -22,5 +22,20 @@ namespace Tests
             //Assert
             Assert.IsTrue(captura, "Fallo: pacman no capturado");
         }
+        [TestMethod]
+        public void TestFantasmaNoCapturaPacman()
+        {
+            //Arrange
+            Tablero t = new Tablero(3, 3);
+            t.setPersonaje(0, 0, 1, 0, 0);
+            t.setPersonaje(1, 0, 0, 0, 0);
+
+            //Act
+            t.mueveFantasmas(0);
+            bool captura = t.captura();
+
+            //Assert
+            Assert.IsFalse(captura, "Fallo: pacman capturado");
+        }
     }
 }

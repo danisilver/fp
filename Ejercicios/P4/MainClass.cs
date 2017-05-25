@@ -36,10 +36,10 @@ namespace P4 {
 				Console.WriteLine ("pulsa enter para cargar el nivel" + player.nivel);
 				Console.ReadLine ();
 				Console.Clear ();
-				t = new Tablero ("level0" + player.nivel +".dat");
+				t = new Tablero ("Levels/level0" + player.nivel +".dat");
 			} else if (tecla == 'n') {
 				Console.Clear ();
-				t = new Tablero ("level00.dat");
+				t = new Tablero ("Levels/level00.dat");
 			} else if (tecla == 'r') {
 				mostrarJugadores ();
 				return;
@@ -101,7 +101,7 @@ namespace P4 {
 					Tablero t2;
 					t2 = t;
 					try {
-						t2 = new Tablero("level0" + (t.numNivel + 1) + ".dat");
+						t2 = new Tablero("Levels/level0" + (t.numNivel + 1) + ".dat");
 					} catch (FileNotFoundException ex) {
 						Console.WriteLine ("archivo no encontrado: " + ex.FileName);
 					}
