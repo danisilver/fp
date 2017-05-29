@@ -18,17 +18,20 @@ namespace P4 {
 				"cualquier otra tecla para salir");
 			char tecla = Console.ReadKey (true).KeyChar;
 
-			Tablero t;
+			Tablero t = null;
 			if (tecla == 'c') {
+                bool encontrado = false;
+                while (!encontrado) {
 				Console.Write ("Introduce el nombre de tu partida: ");
 				string partida = Console.ReadLine ();
 				Console.Clear ();
-                try {
-                    t = new Tablero (partida);
-                }
-                catch (Exception) {
-                    
-                    throw;
+                    try {
+                        t = new Tablero(partida);
+                        encontrado = true;
+                    }
+                    catch (Exception) {
+                        Console.WriteLine("partida no encontrada");
+                    }
                 }
 			} 
             /*
@@ -88,7 +91,6 @@ namespace P4 {
 						string partida = Console.ReadLine ();
 						t.guardar (partida);
 						c = ' ';
-						Console.Write ("Escribe tu nombre:");
 					}
 					if (c == 'p') {
 						Console.WriteLine ("Pausa");
