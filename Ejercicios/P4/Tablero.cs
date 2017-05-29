@@ -398,6 +398,7 @@ namespace P4 {
             FILS = nFils;
             pers = new Personaje[5];
             rnd = new Random();
+            celdas = new ListaPares();
             for (int i = 0; i < nFils; i++)
                 for (int j = 0; j < nCols; j++)
                 {

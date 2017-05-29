@@ -20,14 +20,12 @@ namespace P4 {
 
 			Tablero t = null;
 			if (tecla == 'c') {
-                bool encontrado = false;
-                while (!encontrado) {
+                while (t == null) {
 				Console.Write ("Introduce el nombre de tu partida: ");
 				string partida = Console.ReadLine ();
 				Console.Clear ();
                     try {
                         t = new Tablero(partida);
-                        encontrado = true;
                     }
                     catch (Exception) {
                         Console.WriteLine("partida no encontrada");

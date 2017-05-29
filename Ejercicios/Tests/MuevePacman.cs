@@ -256,7 +256,6 @@ namespace Tests
             Assert.AreEqual(0, t.getPersonaje(0).posY, "Posicion Y incorrecta de Pacman");
         }
 
-        /*
         [TestMethod]
         public void TestMuevePacmanComeVitamina()
         {
@@ -268,7 +267,7 @@ namespace Tests
 
             t.muevePacman();
             //Assert
-            Assert.IsNull(t.cas[2, 0]);
+            Assert.AreNotEqual(t.cas[0, 1], Tablero.Casilla.Vitamina);
         }
 
         [TestMethod]
@@ -281,7 +280,7 @@ namespace Tests
             //Act
             t.muevePacman();
             //Assert
-            Assert.AreEqual(0, t.getNumComida(), "Fallo: no se comio el punto");
-        }*/
+            Assert.AreNotEqual(t.cas[0, 1], Tablero.Casilla.Comida);
+        }
     }
 }
