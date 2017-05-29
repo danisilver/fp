@@ -316,8 +316,10 @@ namespace P4 {
 			for (int i = 1; i < pers.Length; i++) {
 				int nx, ny;
 				if (siguiente (pers [i].posX, pers [i].posY, pers [i].dirX, pers [i].dirY, out nx, out ny)) {
-					pers [i].posX = nx;
-					pers [i].posY = ny;
+                    if (!hayFantasma(nx, ny)) { 
+                        pers [i].posX = nx;
+					    pers [i].posY = ny;
+                    }
 				}
 				seleccionaDir (i);
 			}
@@ -362,7 +364,6 @@ namespace P4 {
 
 			for (int i = 0; i < FILS; i++) {
 				sw.WriteLine(new string(temp[i]));
-
 			}
 			sw.Write ("" + numNivel);
 			sw.Close ();
