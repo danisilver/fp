@@ -46,7 +46,7 @@ namespace P4 {
 		// flag para mensajes de depuracion en consola
 		private bool Debug = true;
 
-		public Tablero (string archivo) {
+		public Tablero (string archivo)  {
 			celdas = new ListaPares ();
 			getDim (archivo, out COLS, out FILS);
 			numComida = 0;
@@ -193,7 +193,7 @@ namespace P4 {
 
 			if (interactivo)
 				return true;
-			return (cas [nx, ny] != Casilla.Muro && cas [nx, ny] != Casilla.MuroCelda) && !hayFantasma(nx,ny);
+			return (cas [nx, ny] != Casilla.Muro && cas [nx, ny] != Casilla.MuroCelda);
 		}
 
 		public void muevePacman () {

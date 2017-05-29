@@ -11,9 +11,9 @@ namespace P4 {
 		public static void Main (string[] args) {
 
 			Console.WriteLine("Bienvenido a PACMAN\nPulsa c para cargar una partida\n" +
-				"pulsa C para cargar tus logros\n" +
+				//"pulsa C para cargar tus logros\n" +
 				"pulsa n para empezar una nueva partida\n" +
-				"pulsa r para ver la lista de jugadores\n" +
+				//"pulsa r para ver la lista de jugadores\n" +
 				"pulsa d para abrir el diseñador de niveles\n" +
 				"cualquier otra tecla para salir");
 			char tecla = Console.ReadKey (true).KeyChar;
@@ -23,8 +23,16 @@ namespace P4 {
 				Console.Write ("Introduce el nombre de tu partida: ");
 				string partida = Console.ReadLine ();
 				Console.Clear ();
-				t = new Tablero (partida);
-			} else if (tecla == 'C') {
+                try {
+                    t = new Tablero (partida);
+                }
+                catch (Exception) {
+                    
+                    throw;
+                }
+			} 
+            /*
+            else if (tecla == 'C') {
 				Console.Write ("Introduce tu nombre de jugador: ");
 				Jugador player;
 				string playername = Console.ReadLine ();
@@ -37,13 +45,19 @@ namespace P4 {
 				Console.ReadLine ();
 				Console.Clear ();
 				t = new Tablero ("Levels/level0" + player.nivel +".dat");
-			} else if (tecla == 'n') {
+			} 
+            */
+            else if (tecla == 'n') {
 				Console.Clear ();
 				t = new Tablero ("Levels/level00.dat");
-			} else if (tecla == 'r') {
+			} 
+            /*
+            else if (tecla == 'r') {
 				mostrarJugadores ();
 				return;
-			} else if (tecla == 'd') {
+			} 
+            */
+            else if (tecla == 'd') {
 				Console.WriteLine ("Escribe el nombre del fichero");
 				string fichero = Console.ReadLine ();
 				Console.Write("FILAS: ");
