@@ -4,7 +4,6 @@ using System.IO;
 namespace P4 {
 	public class Tablero {
 		bool interactivo = false;
-		
 		int FILS, COLS;
 
 		public enum Casilla {
