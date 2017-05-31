@@ -4,138 +4,116 @@ using System.Collections.Generic;
 
 namespace P4 {
 	public class MainClass {
-		struct Jugador{
+        public static string STRMENU = "Bienvenido a PACMAN\n" +
+                "Pulsa c para cargar una partida\n" +
+                "pulsa C para cargar tus logros\n" +
+                "pulsa n para empezar una nueva partida\n" +
+                "pulsa r para ver la lista de jugadores\n" +
+                "pulsa d para abrir el diseñador de niveles\n" +
+                "cualquier otra tecla para salir";
+
+        public static int NUMNIVELES = 10;
+
+        public struct Jugador{
 			public string nombre;
 			public int nivel;
 		}
 
 		public static void Main (string[] args) {
-
-			Console.WriteLine("Bienvenido a PACMAN\nPulsa c para cargar una partida\n" +
-				"pulsa C para cargar tus logros\n" +
-				"pulsa n para empezar una nueva partida\n" +
-				"pulsa r para ver la lista de jugadores\n" +
-				"pulsa d para abrir el diseñador de niveles\n" +
-				"cualquier otra tecla para salir");
-			char tecla = Console.ReadKey (true).KeyChar;
-			Jugador player = new Jugador (){nombre = "Noob", nivel=0 };
-			Tablero t = null;
-			if (tecla == 'c') {
-                while (t == null) {
-				Console.Write ("Introduce el nombre de tu partida: ");
-				string partida = Console.ReadLine ();
-				Console.Clear ();
-                    try {
-                        t = new Tablero(partida);
-                    }
-                    catch (Exception) {
-                        Console.WriteLine("partida no encontrada");
+            bool salir = false;
+			while (!salir)
+			{
+                Console.Clear();
+                Console.WriteLine(STRMENU);
+                char tecla = Console.ReadKey(true).KeyChar;
+                Jugador player = new Jugador() { nombre = "Noob", nivel = 0 };
+                Tablero t = null;
+                if (tecla == 'c')
+                {
+                    while (t == null)
+                    {
+                        Console.Write("Introduce el nombre de tu partida: ");
+                        string partida = Console.ReadLine();
+                        Console.Clear();
+                        try
+                        {
+                            t = new Tablero(partida);
+                            t.Dibuja();
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("partida no encontrada");
+                        }
                     }
                 }
-			} 
-            
-            else if (tecla == 'C') {
-				Console.Write ("Introduce tu nombre de jugador: ");
-				string playername = Console.ReadLine ();
-				if (buscarJugador (playername, out player)) {
-					Console.WriteLine ("encontrado");
-				} else { 
-					Console.WriteLine ("creado nuevo jugador: " + playername);
-				}
-				Console.WriteLine ("pulsa enter para cargar el nivel" + player.nivel);
-				Console.ReadLine ();
-				Console.Clear ();
-				t = new Tablero ("Levels/level0" + player.nivel +".dat");
-			} 
-            
-            else if (tecla == 'n') {
-				Console.Clear ();
-				Console.Write ("Introduce tu nombre de jugador o enter para jugar como Noob: ");
-				string playername = Console.ReadLine ();
-                if (playername.Replace(" ", "") == "") {
-                    Console.WriteLine("juegas como Noob");
-                } else if (buscarJugador (playername, out player)) {
-					Console.WriteLine ("encontrado");
-				}
-				t = new Tablero ("Levels/level00.dat");
-                Console.Clear();
-            } 
-            
-            else if (tecla == 'r') {
-				mostrarJugadores ();
-				return;
-			} 
-            
-            else if (tecla == 'd') {
-				Console.WriteLine ("Escribe el nombre del fichero");
-				string fichero = Console.ReadLine ();
-				Console.Write("FILAS: ");
-				int filas = int.Parse(Console.ReadLine ());
-				Console.Write("COLUMNAS: ");
-				int columnas = int.Parse(Console.ReadLine ());
-				creaFicheroVacio (fichero,filas, columnas);
-				t = new Tablero (fichero);
-				t.setInteractivo (true);
-				constructorInteractivo (t);
-				return;
-			} else {
-				return;
-			}
 
-			t.Dibuja();
-			int lap = 200; // retardo para bucle ppal
-			char c = ' ';
-			bool capture = false;
-			bool salir = false;
-			while (!capture && !salir)
-			{
-				while (!t.finNivel()&& !capture && !salir)
-				{
-					leeInput(ref c);
-					if(c == 'g'){
-						Console.Write ("Escribe el nombre de tu partida para guardar: ");
-						string partida = Console.ReadLine ();
-						t.guardar (partida);
-						c = ' ';
-					}
-					if (c == 'p') {
-						Console.WriteLine ("Pausa");
-						Console.ReadLine ();
-						c = ' ';
-					} if (c == 'q') {
-						salir = true;
-						c = ' ';
-					}
-					if (c != ' ' && t.cambiaDir(c)) c = ' ';
-					t.muevePacman();
-					capture = t.captura();
-					t.mueveFantasmas(lap);
-					if (!capture)
-						capture = t.captura();
-                    
-					t.Dibuja();
-					System.Threading.Thread.Sleep(lap);
-				}
-				if (!capture && !salir)
-				{
-					Console.Clear();
-					Console.WriteLine("Has completado el nivel");
-					Console.ReadKey();
-					Tablero t2;
-					t2 = t;
-					try {
-						t2 = new Tablero("Levels/level0" + (t.numNivel + 1) + ".dat");
-					} catch (FileNotFoundException ex) {
-						Console.WriteLine ("archivo no encontrado: " + ex.FileName);
-					}
-					t = t2;
-					guardarJugador (player.nombre, t.numNivel);
-				}
-			}
-			Console.Clear();
-			Console.WriteLine("FIN DEL JUEGO");
-			Console.ReadKey();
-		}
+                else if (tecla == 'C')
+                {
+                    Console.Write("Introduce tu nombre de jugador: ");
+                    string playername = Console.ReadLine();
+                    if (buscarJugador(playername, out player)){
+                        Console.WriteLine("encontrado");
+                    } else {
+                        Console.WriteLine("creado nuevo jugador: " + playername);
+                    }
+                    Console.WriteLine("pulsa enter para cargar el nivel" + player.nivel);
+                    Console.ReadLine();
+                    Console.Clear();
+                    t = new Tablero("Levels/level0" + player.nivel + ".dat");
+                    t.Dibuja();
+                }
+
+                else if (tecla == 'n')
+                {
+                    Console.Clear();
+                    Console.Write("Introduce tu nombre de jugador o enter para jugar como Noob: ");
+                    string playername = Console.ReadLine();
+                    if (playername.Replace(" ", "") == "")
+                    {
+                        Console.WriteLine("juegas como Noob");
+                    }
+                    else if (buscarJugador(playername, out player))
+                    {
+                        Console.WriteLine("encontrado");
+                    }
+                    t = new Tablero("Levels/level00.dat");
+                    Console.Clear();
+                    t.Dibuja();
+                }
+
+                else if (tecla == 'r')
+                {
+                    mostrarJugadores();
+                }
+
+                else if (tecla == 'd')
+                {
+                    Console.WriteLine("Escribe el nombre del fichero");
+                    string fichero = Console.ReadLine();
+                    Console.Write("FILAS: ");
+                    int filas = int.Parse(Console.ReadLine());
+                    Console.Write("COLUMNAS: ");
+                    int columnas = int.Parse(Console.ReadLine());
+                    creaFicheroVacio(fichero, filas, columnas);
+                    t = new Tablero(fichero);
+                    t.setInteractivo(true);
+                    levelDesigner(t, fichero);
+                }
+                else {
+                    salir = true;
+                }
+
+
+                if (t != null && !t.finNivel()) {
+                    gameLoop(ref t, player);
+                }
+
+                
+            }
+            Console.Clear();
+            Console.WriteLine("FIN DEL JUEGO");
+            Console.ReadKey();
+        }
 
 		static void guardarJugador(string playername, int nivelJugador){
 			var d = new Dictionary<string, int> ();
@@ -160,7 +138,8 @@ namespace P4 {
 		static bool buscarJugador(string playername, out Jugador jugador){
 			jugador = new Jugador (){nombre = playername, nivel=0 };
 			bool encontrado = false;
-			StreamReader sr = new StreamReader ("jugadores.txt");
+            FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate);
+			StreamReader sr = new StreamReader (fs);
 			while (!sr.EndOfStream && !encontrado) {
 				if (sr.ReadLine () == playername) {
 					jugador.nombre = playername;
@@ -168,23 +147,19 @@ namespace P4 {
 					encontrado = true;
 				}
 			}
-			sr.Close ();
-
+            fs.Close();
 			return encontrado;
 		}
 		static void mostrarJugadores(){
-			try{
-				StreamReader sr = new StreamReader ("jugadores.txt");
-				Console.Clear ();
-				Console.WriteLine ("=========JUGADORES=======");
-				while (!sr.EndOfStream) {
-					Console.WriteLine (sr.ReadLine() + " ,nivel: " + sr.ReadLine());
-				}
-				sr.Close ();
-			} catch(FileNotFoundException){
-				Console.WriteLine ("fichero no encontrado");
+            FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate);
+            StreamReader sr = new StreamReader(fs);
+            Console.Clear ();
+			Console.WriteLine ("=========JUGADORES=======");
+			while (!sr.EndOfStream) {
+				Console.WriteLine (sr.ReadLine() + " ,nivel: " + sr.ReadLine());
 			}
-            Console.ReadLine( );
+            Console.ReadKey();
+			fs.Close ();
 		}
 
 		public static void leeInput (ref char dir) {
@@ -222,7 +197,7 @@ namespace P4 {
 			sw.Close ();
 		}
 
-		static void constructorInteractivo(Tablero t){
+		static void levelDesigner(Tablero t, string filename){
 			bool salir = false;
 			char tecla = ' ';
 			Console.Clear();
@@ -250,9 +225,9 @@ namespace P4 {
 				} else if (tecla == '4') {
 					t.cambiaPersonaje (4);
 				} else if(tecla == 'g'){
-					Console.Write ("Escribe el nombre de tu partida para guardar: ");
-					string partida = Console.ReadLine ();
-					t.guardar (partida);
+					Console.Write ("Partida guardada como: " + filename);
+                    Console.ReadKey();
+					t.guardar (filename);
 				} 
 
 				if (t.cambiaDir (tecla) && tecla != ' ') {
@@ -270,7 +245,80 @@ namespace P4 {
 				System.Threading.Thread.Sleep(200);
 			}
 		}
-	}
 
+        public static void gameLoop(ref Tablero t, Jugador player)
+        {
+            bool jumpToNextLvl = false;
+            int lap = 200; // retardo para bucle ppal
+            char c = ' ';
+            bool capture = false;
+            bool salir = false;
+            while (!t.finNivel() && !capture && !salir)
+            {
+                leeInput(ref c);
+                if (c == 'g')
+                {
+                    Console.Write("Escribe el nombre de tu partida para guardar: ");
+                    string partida = Console.ReadLine();
+                    t.guardar(partida);
+                    c = ' ';
+                }
+                if (c == 'p')
+                {
+                    Console.WriteLine("Pausa");
+                    Console.ReadLine();
+                    c = ' ';
+                }
+                if (c == 'q')
+                {
+                    salir = true;
+                    c = ' ';
+                }
+                if (c == '.')
+                {
+                    jumpToNextLvl = true;
+                }
+                if (c != ' ' && t.cambiaDir(c)) c = ' ';
+                t.muevePacman();
+                capture = t.captura();
+                t.mueveFantasmas(lap);
+                if (!capture)
+                    capture = t.captura();
+
+                t.Dibuja();
+                System.Threading.Thread.Sleep(lap);
+
+                if (t.finNivel() && !capture && !salir || jumpToNextLvl)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Has completado el nivel");
+                    Console.ReadKey();
+                    if (!LoadNextLevel(ref t)) salir = true;
+                    guardarJugador(player.nombre, t.numNivel);
+                    jumpToNextLvl = false;
+                }
+            }
+            
+        }
+
+        public static bool LoadNextLevel(ref Tablero t) {
+            Tablero t2;
+            t2 = t;
+            if (t.numNivel + 1 < NUMNIVELES)
+            {
+                try {
+                t2 = new Tablero("Levels/level0" + (t.numNivel + 1) + ".dat");
+                } catch (FileNotFoundException ex) {
+                    Console.WriteLine("archivo no encontrado: " + ex.FileName);
+                    return false;
+                }
+            } else { return false; }
+            
+            t = t2;
+            return true;
+        }
+    }
+
+        
 }
 
