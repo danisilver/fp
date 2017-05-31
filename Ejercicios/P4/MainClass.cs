@@ -292,8 +292,12 @@ namespace P4 {
                 {
                     Console.Clear();
                     Console.WriteLine("Has completado el nivel");
+                    if (!LoadNextLevel(ref t))
+                    {
+                        salir = true;
+                        Console.WriteLine("VICTORIAAA!");
+                    }
                     Console.ReadKey();
-                    if (!LoadNextLevel(ref t)) salir = true;
                     guardarJugador(player.nombre, t.numNivel);
                     jumpToNextLvl = false;
                 }
