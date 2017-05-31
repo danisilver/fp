@@ -296,7 +296,7 @@ namespace P4 {
 			ListaPares l;
 			int cont;
 			posiblesDirs (fant, out l, out cont);
-			l.nEsimo (rnd.Next (0, cont), out pers [fant].dirX, out pers [fant].dirY);
+			if(cont > 0) l.nEsimo (rnd.Next (0, cont), out pers [fant].dirX, out pers [fant].dirY);
 		}
 
 		public void eliminaMuroFantasmas () {
