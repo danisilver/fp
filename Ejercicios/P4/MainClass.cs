@@ -3,26 +3,29 @@ using System.IO;
 using System.Collections.Generic;
 
 namespace P4 {
-	public class MainClass {
+    public class MainClass
+    {
         public static string STRMENU = "Bienvenido a PACMAN\n" +
-                "Pulsa c para cargar una partida\n" +
-                "pulsa C para cargar tus logros\n" +
-                "pulsa n para empezar una nueva partida\n" +
-                "pulsa r para ver la lista de jugadores\n" +
-                "pulsa d para abrir el diseñador de niveles\n" +
-                "cualquier otra tecla para salir";
+            "Pulsa c para cargar una partida\n" +
+            "pulsa C para cargar tus logros\n" +
+            "pulsa n para empezar una nueva partida\n" +
+            "pulsa r para ver la lista de jugadores\n" +
+            "pulsa d para abrir el diseñador de niveles\n" +
+            "cualquier otra tecla para salir";
 
         public static int NUMNIVELES = 10;
 
-        public struct Jugador{
-			public string nombre;
-			public int nivel;
-		}
+        public struct Jugador
+        {
+            public string nombre;
+            public int nivel;
+        }
 
-		public static void Main (string[] args) {
+        public static void Main(string[] args)
+        {
             bool salir = false;
-			while (!salir)
-			{
+            while (!salir)
+            {
                 Console.Clear();
                 Console.WriteLine(STRMENU);
                 char tecla = Console.ReadKey(true).KeyChar;
@@ -51,9 +54,12 @@ namespace P4 {
                 {
                     Console.Write("Introduce tu nombre de jugador: ");
                     string playername = Console.ReadLine();
-                    if (buscarJugador(playername, out player)){
+                    if (buscarJugador(playername, out player))
+                    {
                         Console.WriteLine("encontrado");
-                    } else {
+                    }
+                    else
+                    {
                         Console.WriteLine("creado nuevo jugador: " + playername);
                     }
                     Console.WriteLine("pulsa enter para cargar el nivel" + player.nivel);
@@ -99,155 +105,194 @@ namespace P4 {
                     t.setInteractivo(true);
                     levelDesigner(t, fichero);
                 }
-                else {
+                else
+                {
                     salir = true;
                 }
 
 
-                if (t != null && !t.finNivel()) {
+                if (t != null && !t.finNivel())
+                {
                     gameLoop(ref t, player);
                 }
 
-                
+
             }
             Console.Clear();
             Console.WriteLine("FIN DEL JUEGO");
             Console.ReadKey();
         }
 
-		static void guardarJugador(string playername, int nivelJugador){
-			var d = new Dictionary<string, int> ();
-			FileStream fs = File.Open ("jugadores.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-			StreamReader sr = new StreamReader (fs);
-			while (!sr.EndOfStream) {
-				d.Add(sr.ReadLine (), int.Parse(sr.ReadLine ()));
-			}
+        static void guardarJugador(string playername, int nivelJugador)
+        {
+            var d = new Dictionary<string, int>();
+            FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            StreamReader sr = new StreamReader(fs);
+            while (!sr.EndOfStream)
+            {
+                d.Add(sr.ReadLine(), int.Parse(sr.ReadLine()));
+            }
             fs.SetLength(0);
-			StreamWriter sw = new StreamWriter (fs);
+            StreamWriter sw = new StreamWriter(fs);
             if (!d.ContainsKey(playername)) d.Add(playername, nivelJugador);
             else d[playername] = nivelJugador;
-			foreach (string key in d.Keys) {
-				sw.WriteLine (key);
-				sw.WriteLine ("" + d [key]);
-			}
+            foreach (string key in d.Keys)
+            {
+                sw.WriteLine(key);
+                sw.WriteLine("" + d[key]);
+            }
             sw.Flush();
             sw.Close();
-			fs.Close ();
-		}
-
-		static bool buscarJugador(string playername, out Jugador jugador){
-			jugador = new Jugador (){nombre = playername, nivel=0 };
-			bool encontrado = false;
-            FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate);
-			StreamReader sr = new StreamReader (fs);
-			while (!sr.EndOfStream && !encontrado) {
-				if (sr.ReadLine () == playername) {
-					jugador.nombre = playername;
-					jugador.nivel = int.Parse (sr.ReadLine ());
-					encontrado = true;
-				}
-			}
             fs.Close();
-			return encontrado;
-		}
-		static void mostrarJugadores(){
+        }
+
+        static bool buscarJugador(string playername, out Jugador jugador)
+        {
+            jugador = new Jugador() { nombre = playername, nivel = 0 };
+            bool encontrado = false;
             FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate);
             StreamReader sr = new StreamReader(fs);
-            Console.Clear ();
-			Console.WriteLine ("=========JUGADORES=======");
-			while (!sr.EndOfStream) {
-				Console.WriteLine (sr.ReadLine() + " ,nivel: " + sr.ReadLine());
-			}
-            Console.ReadKey();
-			fs.Close ();
-		}
-
-		public static void leeInput (ref char dir) {
-			if (Console.KeyAvailable) {
-				ConsoleKeyInfo k = Console.ReadKey(true);
-				switch (k.Key.ToString()) {
-				case "RightArrow":
-					dir = 'r';
-					break;
-				case "LeftArrow":
-					dir = 'l';
-					break;
-				case "UpArrow":
-					dir = 'u';
-					break;
-				case "DownArrow":
-					dir = 'd';
-					break;
-				default:
-					dir = k.KeyChar;
-					break;
-				}
-			}
-		}
-
-		static void creaFicheroVacio(string nombre, int filas, int cols){
-			StreamWriter sw = new StreamWriter (nombre);
-			for (int i = 0; i < filas; i++) {
-				for (int j = 0; j < cols; j++) {
-					sw.Write ('0');
-				}
-				sw.WriteLine ();
-			}
-			sw.Write('0');
-			sw.Close ();
-		}
-
-		static void levelDesigner(Tablero t, string filename){
-			bool salir = false;
-			char tecla = ' ';
-			Console.Clear();
-			t.Dibuja ();
-			while (!salir) {
-				leeInput(ref tecla);
-				if (tecla == 'q') {
-					salir = true;
-				} else if (tecla == 'b') {
-					t.cambiaCasilla (Tablero.Casilla.Blanco);
-				} else if (tecla == 'm') {
-					t.cambiaCasilla (Tablero.Casilla.Muro);
-				} else if (tecla == 'v') {
-					t.cambiaCasilla (Tablero.Casilla.Vitamina);
-				} else if (tecla == 'c') {
-					t.cambiaCasilla (Tablero.Casilla.Comida);
-				} else if (tecla == 'x') {
-					t.cambiaCasilla (Tablero.Casilla.MuroCelda);
-				} else if (tecla == '1') {
-					t.cambiaPersonaje (1);
-				} else if (tecla == '2') {
-					t.cambiaPersonaje (2);
-				} else if (tecla == '3') {
-					t.cambiaPersonaje (3);
-				} else if (tecla == '4') {
-					t.cambiaPersonaje (4);
-				} else if(tecla == 'g'){
-					Console.Write ("Partida guardada como: " + filename);
-                    Console.ReadKey();
-					t.guardar (filename);
-				} 
-
-				if (t.cambiaDir (tecla) && tecla != ' ') {
-					tecla = ' ';
-					t.muevePacman ();
-					t.Dibuja ();
-					Console.WriteLine ("b blanco\n" +
-						"m muro\n" +
-						"v vitamina\n" +
-						"c comida \n" +
-						"x murocelda\n" +
-						"1-4 fantasmas\n");
-				}
-
-				System.Threading.Thread.Sleep(200);
-			}
-		}
-
-        public static void gameLoop(ref Tablero t, Jugador player)
+            while (!sr.EndOfStream && !encontrado)
+            {
+                if (sr.ReadLine() == playername)
+                {
+                    jugador.nombre = playername;
+                    jugador.nivel = int.Parse(sr.ReadLine());
+                    encontrado = true;
+                }
+            }
+            fs.Close();
+            return encontrado;
+        }
+        static void mostrarJugadores()
         {
+            FileStream fs = File.Open("jugadores.txt", FileMode.OpenOrCreate);
+            StreamReader sr = new StreamReader(fs);
+            Console.Clear();
+            Console.WriteLine("=========JUGADORES=======");
+            while (!sr.EndOfStream)
+            {
+                Console.WriteLine(sr.ReadLine() + " ,nivel: " + sr.ReadLine());
+            }
+            Console.ReadKey();
+            fs.Close();
+        }
+
+        public static void leeInput(ref char dir)
+        {
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo k = Console.ReadKey(true);
+                switch (k.Key.ToString())
+                {
+                    case "RightArrow":
+                        dir = 'r';
+                        break;
+                    case "LeftArrow":
+                        dir = 'l';
+                        break;
+                    case "UpArrow":
+                        dir = 'u';
+                        break;
+                    case "DownArrow":
+                        dir = 'd';
+                        break;
+                    default:
+                        dir = k.KeyChar;
+                        break;
+                }
+            }
+        }
+
+        static void creaFicheroVacio(string nombre, int filas, int cols)
+        {
+            StreamWriter sw = new StreamWriter(nombre);
+            for (int i = 0; i < filas; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    sw.Write('0');
+                }
+                sw.WriteLine();
+            }
+            sw.Write('0');
+            sw.Close();
+        }
+
+        static void levelDesigner(Tablero t, string filename)
+        {
+            bool salir = false;
+            char tecla = ' ';
+            Console.Clear();
+            t.Dibuja();
+            while (!salir)
+            {
+                leeInput(ref tecla);
+                if (tecla == 'q')
+                {
+                    salir = true;
+                }
+                else if (tecla == 'b')
+                {
+                    t.cambiaCasilla(Tablero.Casilla.Blanco);
+                }
+                else if (tecla == 'm')
+                {
+                    t.cambiaCasilla(Tablero.Casilla.Muro);
+                }
+                else if (tecla == 'v')
+                {
+                    t.cambiaCasilla(Tablero.Casilla.Vitamina);
+                }
+                else if (tecla == 'c')
+                {
+                    t.cambiaCasilla(Tablero.Casilla.Comida);
+                }
+                else if (tecla == 'x')
+                {
+                    t.cambiaCasilla(Tablero.Casilla.MuroCelda);
+                }
+                else if (tecla == '1')
+                {
+                    t.cambiaPersonaje(1);
+                }
+                else if (tecla == '2')
+                {
+                    t.cambiaPersonaje(2);
+                }
+                else if (tecla == '3')
+                {
+                    t.cambiaPersonaje(3);
+                }
+                else if (tecla == '4')
+                {
+                    t.cambiaPersonaje(4);
+                }
+                else if (tecla == 'g')
+                {
+                    Console.Write("Partida guardada como: " + filename);
+                    Console.ReadKey();
+                    t.guardar(filename);
+                }
+
+                if (t.cambiaDir(tecla) && tecla != ' ')
+                {
+                    tecla = ' ';
+                    t.muevePacman();
+                    t.Dibuja();
+                    Console.WriteLine("b blanco\n" +
+                        "m muro\n" +
+                        "v vitamina\n" +
+                        "c comida \n" +
+                        "x murocelda\n" +
+                        "1-4 fantasmas\n");
+                }
+
+                System.Threading.Thread.Sleep(200);
+            }
+        }
+
+        public static void gameLoop(ref Tablero t, Jugador player) {
             bool jumpToNextLvl = false;
             int lap = 200; // retardo para bucle ppal
             char c = ' ';
@@ -302,27 +347,28 @@ namespace P4 {
                     jumpToNextLvl = false;
                 }
             }
-            
+
         }
 
-        public static bool LoadNextLevel(ref Tablero t) {
+        public static bool LoadNextLevel(ref Tablero t)
+        {
             Tablero t2;
             t2 = t;
-            if (t.numNivel + 1 < NUMNIVELES)
+
+            try
             {
-                try {
                 t2 = new Tablero("Levels/level0" + (t.numNivel + 1) + ".dat");
-                } catch (FileNotFoundException ex) {
-                    Console.WriteLine("archivo no encontrado: " + ex.FileName);
-                    return false;
-                }
-            } else { return false; }
-            
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("archivo no encontrado: " + ex.FileName);
+                return false;
+            }
             t = t2;
             return true;
         }
     }
 
-        
+
 }
 
